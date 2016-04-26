@@ -1,0 +1,46 @@
+This is the README file for the Optics Storage 8000 AT CDROM device driver.
+
+The driver contains code to enable an ISP16 interface if it finds one.  It
+didn't originally (although this README erroneously said so), because I think
+this kind of code should go into its own module. But having to use a hack all
+the time in order to use a part of the standard kernel started to annoy me, so
+I copied the ISP16 code by Eric van der Maarel (maarel@marin.nl) from Vadim
+Model's Sanyo sjcd driver. I'll remove it again from this driver when we have
+some common way to talk to ISP16 interfaces.
+
+My original configuration code for the ISP-16 card can get found at
+      dutette.et.tudelft.nl:/pub/linux/
+and at Eberhard's mirror
+      ftp.gwdg.de:/pub/linux/cdrom/drivers/optics/
+
+Much more elaborate information can be found at ftp:rbrf.msk.su,
+where Vadim Model (vadim@rbrf.msk.su) has made available an ISP16
+device driver.
+Vadim's directory is
+      rbrf.msk.su:/linux/mediamagic/
+and Eberhard is holding a mirror at
+      ftp.gwdg.de:/pub/linux/cdrom/drivers/sanyo/
+
+
+Before you can use the driver, you have to create the device file once:
+ # mknod /dev/optcd0 b 17 0
+
+To specify the base address if the driver is "compiled-in" to your kernel,
+you can use the kernel command line item (LILO option)
+             optcd=0x340
+with the right address.
+
+If you have compiled optcd as a module, you can load it with
+ # insmod /usr/src/linux/modules/optcd.o
+or
+ # insmod /usr/src/linux/modules/optcd.o optcd=0x340
+with the matching address value of your interface card.
+
+I have tried the module with several 1.2.x kernel versions, and it seems to
+work, as far as I tested. It also seems to work for several 1.3.x versions.
+If you use it, I'd appreciate success/failure reports. If you find a bug,
+try recompiling the driver with some strategically chosen #undef DEBUG_...'s
+changed into #defines (you'll find them in .../include/linux/optcd.h) and
+include the messages generated in your bug report. Good luck.
+
+Leo Spiekman (spiekman@dutette.et.tudelft.nl)
